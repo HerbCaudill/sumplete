@@ -22,26 +22,20 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
   return (
     <div
       className={cx(
-        cellStyles,
-        'font-bold text-lg text-black text-transition-all duration-100 cursor-pointer',
+        'Cell ValueCell', //
+        'font-bold text-black cursor-pointer',
         {
-          'bg-white cursor-pointer hover:text-gray-400': state === undefined,
-          'bg-green-600 hover:bg-green-500 text-white font-bold': state === 'INCLUDE',
-          'bg-white text-gray-300': state === 'EXCLUDE',
+          'border border-gray-200 bg-white ': state === 'EMPTY',
+          'bg-green-600  text-white font-bold': state === 'INCLUDE',
+          'border border-gray-200 bg-white text-gray-200': state === 'EXCLUDE',
         }
       )}
       onClick={onClick}
     >
-      {value}
+      <span>{value}</span>
     </div>
   )
 }
-
-export const cellStyles = [
-  'mx-[-1px] my-[-1px] w-16 h-16 border border-gray-200',
-  'flex items-center justify-center',
-  'transition-all duration-100',
-]
 
 type Props = {
   cell: Cell

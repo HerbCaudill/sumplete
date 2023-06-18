@@ -1,17 +1,15 @@
 import cx from 'classnames'
-import { cellStyles } from './ValueCell'
 
 export const TotalCell = ({ targetValue, currentValue = 0 }: Props) => (
   <div
     className={cx(
-      cellStyles,
-      'text-md',
+      'Cell TotalCell m-2',
       targetValue === currentValue //
-        ? 'bg-green-600 text-white font-bold'
-        : 'bg-gray-100'
+        ? 'bg-green-500 text-white font-extrabold rounded-full'
+        : ''
     )}
   >
-    {targetValue}
+    <span className="text-[30cqw]">{targetValue}</span>
   </div>
 )
 
