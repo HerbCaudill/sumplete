@@ -6,10 +6,7 @@ const serif = 'IBM Plex Serif'
 
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
-
-  // note: this needs to be kept in sync with MIN_SIZE+1 and MAX_SIZE+1 (src\constants.ts)
-  safelist: [4, 5, 6, 7, 8, 9, 10].map(x => `grid-cols-${x}`),
-
+  safelist: [4, 5, 6, 7, 8, 9, 10].map(x => `grid-cols-${x}`), // MIN_SIZE+1...MAX_SIZE+1 (keep in sync with src\constants.ts)
   theme: {
     extend: {
       fontFamily: {
