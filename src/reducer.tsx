@@ -2,6 +2,7 @@ import { Reducer } from 'react'
 import { Coordinates, PuzzleState } from './types'
 import { expandState } from 'expandState'
 import { cloneDeep } from 'lodash'
+import { isSolved } from 'selectors'
 
 export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
   const rows = cloneDeep(state.rows)
@@ -31,7 +32,16 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
     }
   }
 
-  return expandState(rows)
+  const newState = expandState(rows)
+  if (isSolved(newState)) {
+    // mark all empty sells as included
+    newState.rows.forEach(row => {
+      row.forEach(cell => {
+        if (cell.state === 'EMPTY') cell.state = 'INCLUDE'
+      })
+    })
+  }
+  return newState
 }
 
 export type Action =
