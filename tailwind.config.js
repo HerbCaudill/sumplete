@@ -1,3 +1,6 @@
+/** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 const emoji = 'Segoe UI Emoji'
 const mono = 'IBM Plex Mono'
 const sans = 'IBM Plex Sans'
@@ -15,11 +18,24 @@ module.exports = {
         condensed: [condensed, emoji, 'sans-serif'],
         serif: [serif, emoji, 'serif'],
       },
+      colors: {
+        primary: colors.blue,
+        secondary: colors.teal,
+        neutral: colors.gray,
+        success: colors.green,
+        warning: colors.orange,
+        danger: colors.red,
+      },
       fontWeight: {
-        thin: '200',
-        normal: '500',
-        bold: '600',
-        extrabold: '800',
+        thin: 100,
+        extralight: 200,
+        light: 300,
+        normal: 400,
+        text: 450,
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+        extrabold: 800,
       },
     },
   },
