@@ -30,6 +30,7 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
       break
     }
   }
+
   return expandState(rows)
 }
 
