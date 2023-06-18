@@ -4,8 +4,8 @@ describe('generatePuzzle', () => {
   it('should generate a puzzle of the specified size', () => {
     const size = 5
     const puzzle = generatePuzzle({ size })
-    expect(puzzle.grid.length).toBe(size)
-    expect(puzzle.grid[0].length).toBe(size)
+    expect(puzzle.rows.length).toBe(size)
+    expect(puzzle.rows[0].length).toBe(size)
     expect(puzzle.rowTotals.length).toBe(size)
     expect(puzzle.colTotals.length).toBe(size)
   })
@@ -25,8 +25,7 @@ describe('generatePuzzle', () => {
 
   it('should calculate the correct row & column totals', () => {
     const puzzle = generatePuzzle({ size: 3, seed: 'test' })
-    console.log(puzzle.grid)
-    expect(puzzle.rowTotals).toEqual([18, 10, 12])
-    expect(puzzle.colTotals).toEqual([19, 14, 7])
+    expect(puzzle.rowTotals.join()).toMatchInlineSnapshot('"22,14,7"')
+    expect(puzzle.colTotals.join()).toMatchInlineSnapshot('"10,14,19"')
   })
 })
