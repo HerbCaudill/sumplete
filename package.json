@@ -1,6 +1,6 @@
 {
   "name": "sumplete",
-  "description": "A game",
+  "description": "A recreation of the puzzle game Sumplete",
   "version": "0.0.1",
   "private": true,
   "author": {
