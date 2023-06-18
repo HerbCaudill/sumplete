@@ -8,7 +8,7 @@
     "email": "herb@devresults.com"
   },
   "scripts": {
-    "dev": "vite --port 3000 --open http://localhost:3000?seed=test",
+    "dev": "vite --port 3000 --open http://localhost:3000?seed=test\"&\"size=3",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest",
