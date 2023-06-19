@@ -4,7 +4,7 @@ import { PuzzleState } from 'types'
 import { range } from 'utils/range'
 import { TotalCell } from './TotalCell'
 import { ValueCell } from './ValueCell'
-import { isSolved } from 'selectors'
+import { formatSeconds } from './formatSeconds'
 
 export const Game = ({ initialState }: Props) => {
   const size = initialState.rows.length
@@ -35,7 +35,7 @@ export const Game = ({ initialState }: Props) => {
 
   return (
     <>
-      <div className="my-4 border p-2 rounded-lg font-semibold">⏱️ {format(seconds)}</div>
+      <div className="my-4 border p-2 rounded-lg font-semibold">⏱️ {formatSeconds(seconds)}</div>
       {/* grid */}
       <div className={`select-none grid grid-cols-${size + 1} w-full gap-1 `}>
         {nums.map(i => (
@@ -70,7 +70,9 @@ export const Game = ({ initialState }: Props) => {
       </div>
       {/* success message */}
       {state.solved ? (
-        <p className="text-lg font-serif mt-2">🥳 You solved it in {format(seconds)}. Well done!</p>
+        <p className="text-lg font-serif mt-2">
+          🥳 You solved it in {formatSeconds(seconds)}. Well done!
+        </p>
       ) : (
         <p>
           <button className="button-xs button-white" onClick={() => dispatch({ type: 'RESTART' })}>
@@ -80,14 +82,6 @@ export const Game = ({ initialState }: Props) => {
       )}
     </>
   )
-}
-
-// format seconds as mm:ss
-const format = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60)
-  const remainder = seconds % 60
-  const paddedSeconds = remainder < 10 ? `0${remainder}` : remainder
-  return `${minutes}:${paddedSeconds}`
 }
 
 type Props = {
