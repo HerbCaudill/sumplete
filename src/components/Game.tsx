@@ -27,7 +27,7 @@ export const Game = ({ initialState }: Props) => {
       setInterval(() => {
         if (state.solved) stopTimer()
         else setSeconds(Math.floor((Date.now() - state.startTime) / 1000))
-      }, 1000)
+      }, 100)
     )
 
     return stopTimer
@@ -68,19 +68,16 @@ export const Game = ({ initialState }: Props) => {
         {/* blank lower-right cell */}
         <TotalCell />
       </div>
-      <div>
-        {/* success message */}
-        {state.solved && (
-          <p className="text-lg font-serif mt-2">
-            🥳 You solved it in {format(seconds)}. Well done!
-          </p>
-        )}
-      </div>
-      <div>
-        <button className="button-xs button-white" onClick={() => dispatch({ type: 'RESTART' })}>
-          Restart
-        </button>
-      </div>
+      {/* success message */}
+      {state.solved ? (
+        <p className="text-lg font-serif mt-2">🥳 You solved it in {format(seconds)}. Well done!</p>
+      ) : (
+        <p>
+          <button className="button-xs button-white" onClick={() => dispatch({ type: 'RESTART' })}>
+            Restart
+          </button>
+        </p>
+      )}
     </>
   )
 }
