@@ -17,7 +17,7 @@ export const generatePuzzle = ({ size = 3, seed = undefined }: Props = {}): Puzz
       state: 'EMPTY',
     }))
   )
-  return expandState(rows)
+  return expandState({ rows })
 }
 
 type Props = {

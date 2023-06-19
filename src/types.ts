@@ -18,8 +18,10 @@ export type PuzzleGrid = {
 }
 
 export type PuzzleState = PuzzleGrid & {
+  startTime: number
   rowTargets: number[]
   colTargets: number[]
   rowTotals: number[]
   colTotals: number[]
+  solved?: boolean
 }

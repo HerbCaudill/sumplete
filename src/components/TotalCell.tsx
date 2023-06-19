@@ -3,7 +3,7 @@ import cx from 'classnames'
 export const TotalCell = ({ targetValue, currentValue = 0 }: Props) => (
   <div
     className={cx(
-      'Cell TotalCell m-2',
+      'Cell TotalCell m-4',
       targetValue === currentValue //
         ? 'bg-green-500 text-white font-extrabold rounded-full'
         : ''

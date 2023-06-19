@@ -5,10 +5,15 @@ import { cloneDeep } from 'lodash'
 import { isSolved } from 'selectors'
 
 export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
-  const rows = cloneDeep(state.rows)
+  const partialState = {
+    startTime: state.startTime,
+    rows: cloneDeep(state.rows),
+  }
+
   switch (action.type) {
     case 'RESTART': {
-      rows.forEach(row => {
+      // clear all included/excluded cells
+      partialState.rows.forEach(row => {
         row.forEach(cell => {
           cell.state = 'EMPTY'
         })
@@ -16,31 +21,37 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
       break
     }
     case 'CLEAR': {
+      // clear this cell
       const { row, col } = action.coordinates
-      rows[row][col].state = 'EMPTY'
+      partialState.rows[row][col].state = 'EMPTY'
       break
     }
     case 'INCLUDE': {
+      // mark this cell included
       const { row, col } = action.coordinates
-      rows[row][col].state = 'INCLUDE'
+      partialState.rows[row][col].state = 'INCLUDE'
       break
     }
     case 'EXCLUDE': {
+      // mark this cell excluded
       const { row, col } = action.coordinates
-      rows[row][col].state = 'EXCLUDE'
+      partialState.rows[row][col].state = 'EXCLUDE'
       break
     }
   }
 
-  const newState = expandState(rows)
-  if (isSolved(newState)) {
-    // mark all empty sells as included
+  // calculate totals etc.
+  const newState = expandState(partialState)
+
+  // when puzzle is solved, mark all empty (non-excluded) cells as included
+  if (newState.solved) {
     newState.rows.forEach(row => {
       row.forEach(cell => {
         if (cell.state === 'EMPTY') cell.state = 'INCLUDE'
       })
     })
   }
+
   return newState
 }
 
