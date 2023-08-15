@@ -1,9 +1,16 @@
-import { useState, type Dispatch, type SetStateAction } from "react"
+import { useState, type Dispatch, type SetStateAction } from 'react'
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     const storedValue = window.localStorage.getItem(key)
-    return storedValue ? (JSON.parse(storedValue) as T) : initialValue
+    if (storedValue) {
+      // use stored value if it exists
+      return JSON.parse(storedValue)
+    } else {
+      // otherwise initialize with initialValue
+      setValue(initialValue)
+      return initialValue
+    }
   })
 
   const setValue = (arg: T | ((s: T) => T)) => {
