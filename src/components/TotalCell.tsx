@@ -5,7 +5,7 @@ export const TotalCell = ({ targetValue, currentValue = 0 }: Props) => (
     className={cx(
       'Cell TotalCell m-4',
       targetValue === currentValue //
-        ? 'bg-green-500 text-white font-extrabold rounded-full'
+        ? 'bg-green-600 text-white font-extrabold rounded-full'
         : ''
     )}
   >
