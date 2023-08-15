@@ -1,12 +1,8 @@
 import { generatePuzzle } from 'generatePuzzle'
-import { Game } from './Game'
+import { useState } from 'react'
 import { queryString } from 'utils/queryString'
 import { DEFAULT_SIZE, MAX_SIZE, MIN_SIZE } from '../constants'
-import { RadioGroup } from './RadioGroup'
-import { range } from 'utils/range'
-import { useState } from 'react'
-
-const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({ label: `${n}⨉${n}`, value: String(n) }))
+import { Game } from './Game'
 
 export const App = () => {
   // allow setting a random seed via query string (for testing or sharing)
@@ -20,22 +16,13 @@ export const App = () => {
   }
 
   // allow setting grid size via query string
-  const [size, setSize] = useState(getInitialSize())
-
-  const [puzzle, setPuzzle] = useState(generatePuzzle({ seed, size }))
+  const [size] = useState(getInitialSize)
+  const [puzzle] = useState(generatePuzzle({ seed, size }))
 
   return (
     <div className="flex flex-col items-center ">
-      <div className="container auto-mx flex flex-col max-w-lg gap-2">
+      <div className="container auto-mx flex flex-col max-w-xl gap-2">
         <Game initialState={puzzle} />
-        <p className="hidden">
-          {/* <RadioGroup
-            label="Size"
-            initialValue={String(size)}
-            options={sizes}
-            onChange={() => {}}
-          /> */}
-        </p>
       </div>
     </div>
   )
