@@ -11,8 +11,34 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
   }
 
   switch (action.type) {
+    case 'NEW': {
+      // start new game
+      return initializer(action.initialState)
+    }
+
+    case 'CLEAR': {
+      // clear this cell
+      const { row, col } = action.coordinates
+      partialState.rows[row][col].state = 'EMPTY'
+      break
+    }
+
+    case 'INCLUDE': {
+      // mark this cell included
+      const { row, col } = action.coordinates
+      partialState.rows[row][col].state = 'INCLUDE'
+      break
+    }
+
+    case 'EXCLUDE': {
+      // mark this cell excluded
+      const { row, col } = action.coordinates
+      partialState.rows[row][col].state = 'EXCLUDE'
+      break
+    }
+
     case 'RESTART': {
-      // clear all included/excluded cells
+      // start this game over (clear all included/excluded cells)
       partialState.rows.forEach(row => {
         row.forEach(cell => {
           cell.state = 'EMPTY'
@@ -20,22 +46,9 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
       })
       break
     }
-    case 'CLEAR': {
-      // clear this cell
-      const { row, col } = action.coordinates
-      partialState.rows[row][col].state = 'EMPTY'
-      break
-    }
-    case 'INCLUDE': {
-      // mark this cell included
-      const { row, col } = action.coordinates
-      partialState.rows[row][col].state = 'INCLUDE'
-      break
-    }
-    case 'EXCLUDE': {
-      // mark this cell excluded
-      const { row, col } = action.coordinates
-      partialState.rows[row][col].state = 'EXCLUDE'
+
+    case 'END': {
+      // end the game
       break
     }
   }
@@ -55,8 +68,12 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
   return newState
 }
 
+export const initializer = (initialState: PuzzleState) => initialState
+
 export type Action =
-  | { type: 'RESTART' }
+  | { type: 'NEW'; initialState: PuzzleState }
   | { type: 'CLEAR'; coordinates: Coordinates }
   | { type: 'INCLUDE'; coordinates: Coordinates }
   | { type: 'EXCLUDE'; coordinates: Coordinates }
+  | { type: 'RESTART' }
+  | { type: 'END' }
