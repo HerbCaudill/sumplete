@@ -3,7 +3,6 @@ import { initializer, reducer } from 'reducer'
 import { PuzzleState } from 'types'
 import { range } from 'utils/range'
 import { MAX_SIZE, MIN_SIZE } from '../constants'
-import { formatSeconds } from '../formatSeconds'
 import { TotalCell } from './TotalCell'
 import { ValueCell } from './ValueCell'
 import { RadioGroup } from './RadioGroup'
@@ -11,10 +10,11 @@ import { generatePuzzle } from 'generatePuzzle'
 import { Confetti } from './Confetti'
 import { useCompletionRecords } from '../hooks/useCompletionRecords'
 import { RecordNotification } from './RecordNotification'
+import { Timer } from './Timer'
 import cx from 'classnames'
 
 const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
-  label: `${n}⨉${n}`,
+  label: String(n),
   value: String(n)
 }))
 
@@ -41,30 +41,6 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     }
   }, [])
 
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
-  const [seconds, setSeconds] = useState(0)
-
-  // start timer when the game starts
-  useEffect(() => {
-    if (timer) clearInterval(timer)
-    setTimer(
-      setInterval(
-        () => setSeconds(Math.floor((Date.now() - state.startTime) / 1000)),
-        100
-      )
-    )
-  }, [state.startTime])
-
-  // stop timer when the game is solved
-  useEffect(() => {
-    if (state.solved) {
-      if (timer) {
-        clearInterval(timer)
-        setTimer(null)
-      }
-    }
-  }, [state.solved])
-
   // Record completion time when the game is solved
   useEffect(() => {
     if (state.solved && !completionTime) {
@@ -90,6 +66,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     dispatch({ type: 'RESTART' })
   }
 
+  console.log('rendering game')
   return (
     <>
       {state.solved && isNewRecord && completionTime ? (
@@ -109,21 +86,11 @@ export const Game = ({ initialState, onStateChange }: Props) => {
       <div className="flex flex-col gap-4 select-none p-3">
         {/* toolbar */}
         <div className="flex w-full gap-2">
-          {/* Timer */}
-          <div
-            className={cx(
-              'border p-2 rounded-lg grow flex items-center gap-2',
-              { 'text-white border-transparent bg-green-500': state.solved }
-            )}
-          >
-            <IconStopwatch className="size-4" />
-            <span className="text-sm font-semibold grow">
-              {formatSeconds(seconds)}
-            </span>
-            {bestTime !== null && (
-              <span className="text-xs ">Best: {formatSeconds(bestTime)}</span>
-            )}
-          </div>
+          <Timer
+            startTime={state.startTime}
+            isSolved={Boolean(state.solved)}
+            bestTime={bestTime}
+          />
 
           {/* Reload */}
           {!state.solved ? (
