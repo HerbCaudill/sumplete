@@ -69,9 +69,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
               'py-1 px-4 rounded border border-black',
               'animate-celebrate'
             )}
-            style={{
-              transform: ' scale3d(1,1,1)'
-            }}
+            style={{ transform: 'scale3d(1,1,1)' }}
           >
             🥳 You solved it in {formatSeconds(seconds)}. Well done!
           </div>
@@ -99,6 +97,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
               <TotalCell //
                 targetValue={state.rowTargets[i]}
                 currentValue={state.rowTotals[i]}
+                dir="row"
               />
             </Fragment>
           ))}
@@ -108,6 +107,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
               key={`col-total-${j}`}
               targetValue={state.colTargets[j]}
               currentValue={state.colTotals[j]}
+              dir="column"
             />
           ))}
 

@@ -21,15 +21,15 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
         'font-bold text-black cursor-pointer',
         {
           'border border-gray-200 bg-white ': state === 'EMPTY',
-          'bg-green-600  text-white font-bold': state === 'INCLUDE',
-          'border border-gray-200 bg-white text-gray-200': state === 'EXCLUDE',
+          'bg-green-500  text-white font-bold': state === 'INCLUDE',
+          'border border-gray-200 bg-white text-gray-200': state === 'EXCLUDE'
         }
       )}
-      onClick={e => {
+      onClick={(e) => {
         if (e.shiftKey) toggleInclude()
         else toggleExclude()
       }}
-      onDoubleClick={e => {
+      onDoubleClick={(e) => {
         toggleInclude()
       }}
     >
