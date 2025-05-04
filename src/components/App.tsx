@@ -2,6 +2,8 @@ import { generatePuzzle } from 'generatePuzzle'
 import { useState } from 'react'
 import { queryString } from 'utils/queryString'
 import { DEFAULT_SIZE, MAX_SIZE, MIN_SIZE } from '../constants'
+import { useLocalStorage } from '../hooks/useLocalStorage'
+import { PuzzleState } from '../types'
 import { Game } from './Game'
 
 export const App = () => {
@@ -17,13 +19,18 @@ export const App = () => {
 
   // allow setting grid size via query string
   const [size] = useState(getInitialSize)
-  const [puzzle] = useState(generatePuzzle({ seed, size }))
 
-  return (
-    <div className="flex flex-col items-center ">
+  // Create initial puzzle state if none exists in storage
+  const createInitialPuzzle = () => generatePuzzle({ seed, size })
+
+  // Use local storage to persist the puzzle state
+  const [puzzle, setPuzzle] = useLocalStorage<PuzzleState>('sumplete-puzzle', createInitialPuzzle)
+
+  return puzzle ? (
+    <div className="flex flex-col items-center">
       <div className="container auto-mx flex flex-col max-w-xl gap-2">
-        <Game initialState={puzzle} />
+        <Game initialState={puzzle} onStateChange={setPuzzle} />
       </div>
     </div>
-  )
+  ) : null
 }

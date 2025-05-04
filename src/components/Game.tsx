@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer, useState } from 'react'
+import { Fragment, useEffect, useReducer, useState, useCallback } from 'react'
 import { initializer, reducer } from 'reducer'
 import { PuzzleState } from 'types'
 import { range } from 'utils/range'
@@ -11,12 +11,18 @@ import { generatePuzzle } from 'generatePuzzle'
 
 const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({ label: `${n}⨉${n}`, value: String(n) }))
 
-export const Game = ({ initialState }: Props) => {
+export const Game = ({ initialState, onStateChange }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState, initializer)
+
+  // Use useEffect to call onStateChange after state updates
+  useEffect(() => {
+    if (onStateChange) onStateChange(state)
+  }, [state, onStateChange])
+
   const size = state.rows.length
   const nums = range(0, size - 1)
 
-  const [timer, setTimer] = useState<NodeJS.Timer | null>(null)
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
   const [seconds, setSeconds] = useState(0)
 
   useEffect(() => {
@@ -38,8 +44,9 @@ export const Game = ({ initialState }: Props) => {
     return stopTimer
   }, [state.startTime, state.solved])
 
-  const startNewGame = (value: string) => {
-    dispatch({ type: 'NEW', initialState: generatePuzzle({ size: Number(value) }) })
+  const startNewGame = (size: string) => {
+    const newState = generatePuzzle({ size: Number(size) })
+    dispatch({ type: 'NEW', initialState: newState })
   }
 
   const restartGame = () => {
@@ -49,6 +56,7 @@ export const Game = ({ initialState }: Props) => {
   return (
     <>
       <div className="my-4 border p-2 rounded-lg font-semibold">⏱️ {formatSeconds(seconds)}</div>
+
       {/* grid */}
       <div className={`select-none grid grid-cols-${size + 1} w-full gap-1 `}>
         {nums.map(i => (
@@ -107,4 +115,5 @@ export const Game = ({ initialState }: Props) => {
 
 type Props = {
   initialState: PuzzleState
+  onStateChange?: (state: PuzzleState) => void
 }
