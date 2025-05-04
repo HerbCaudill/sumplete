@@ -8,8 +8,8 @@ export type Coordinates = {
 export type Cell = {
   coordinates: Coordinates
   value: number
-  included: boolean
-  state: CellState
+  included: boolean // is this cell included in the puzzle solution?
+  state: CellState // the UI state of this cell
 }
 
 export type PuzzleGrid = {
