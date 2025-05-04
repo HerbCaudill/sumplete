@@ -106,7 +106,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         </>
       ) : null}
 
-      <div className="flex flex-col h-screen gap-4 select-none p-3">
+      <div className="flex flex-col gap-4 select-none p-3">
         {/* toolbar */}
         <div className="flex w-full gap-2">
           {/* Timer */}
@@ -177,8 +177,6 @@ export const Game = ({ initialState, onStateChange }: Props) => {
           {/* blank lower-right cell */}
           <TotalCell />
         </div>
-
-        <div className="grow"></div>
 
         {/* size selector */}
         <RadioGroup
