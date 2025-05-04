@@ -1,18 +1,24 @@
 import cx from 'classnames'
 
 export const TotalCell = ({ targetValue, currentValue = 0, dir }: Props) => (
-  <div className={cx('Cell TotalCell')}>
-    <span
-      className={cx('flex items-center justify-center gap-2', {
+  <div className="Cell TotalCell">
+    <div
+      className={cx('flex gap-1 w-full leading-none p-[10cqw]', {
         'text-green-600': targetValue === currentValue,
-        'flex-col': dir === 'column'
+        'flex-col items-center justify-start': dir === 'column',
+        'flex-row items-center justify-start': dir === 'row'
       })}
+      style={{
+        fontSize: 'max(10px, min(30cqw, 20px))'
+      }}
     >
       <span>{targetValue}</span>
-      {targetValue === currentValue ? (
-        <IconCircleCheckFilled className="size-[20cqw]" />
-      ) : null}
-    </span>
+      <span>
+        {targetValue === currentValue ? (
+          <IconCircleCheckFilled className="size-[1.5em]" />
+        ) : null}
+      </span>
+    </div>
   </div>
 )
 

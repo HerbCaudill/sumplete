@@ -1,17 +1,14 @@
 .Cell {
-  @apply aspect-square;
-  @apply flex items-center justify-center;
+  @apply flex aspect-square;
   @apply transition-all duration-100;
   container-type: inline-size;
   container-name: Cell;
 }
 
 .ValueCell span {
-  font-size: max(18px, min(40cqw, 30px));
 }
 
 .TotalCell span {
-  font-size: max(14px, min(30cqw, 20px));
 }
 
 p {

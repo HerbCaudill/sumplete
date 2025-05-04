@@ -81,7 +81,9 @@ export const Game = ({ initialState, onStateChange }: Props) => {
           ⏱️ {formatSeconds(seconds)}
         </div>
         {/* grid */}
-        <div className={`select-none grid grid-cols-${size + 1} w-full gap-1 `}>
+        <div
+          className={`select-none  grid grid-cols-${size + 1} w-full gap-1 `}
+        >
           {nums.map((i) => (
             <Fragment key={`row-${i}`}>
               {/* row values */}

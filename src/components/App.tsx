@@ -24,11 +24,14 @@ export const App = () => {
   const createInitialPuzzle = () => generatePuzzle({ seed, size })
 
   // Use local storage to persist the puzzle state
-  const [puzzle, setPuzzle] = useLocalStorage<PuzzleState>('sumplete-puzzle', createInitialPuzzle)
+  const [puzzle, setPuzzle] = useLocalStorage<PuzzleState>(
+    'sumplete-puzzle',
+    createInitialPuzzle
+  )
 
   return puzzle ? (
     <div className="flex flex-col items-center">
-      <div className="container auto-mx flex flex-col max-w-xl gap-2">
+      <div className="container mx-auto flex flex-col max-w-xl gap-2">
         <Game initialState={puzzle} onStateChange={setPuzzle} />
       </div>
     </div>
