@@ -30,7 +30,10 @@
     "react-use": "^17.6.0",
     "unplugin-auto-import": "^19.1.2",
     "unplugin-icons": "^22.1.0",
-    "vite-plugin-pwa": "^1.0.0"
+    "vite-plugin-pwa": "^1.0.0",
+    "workbox-core": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0"
   },
   "devDependencies": {
     "@iconify-json/tabler": "^1.2.17",
