@@ -1,4 +1,5 @@
 import { generatePuzzle } from './generatePuzzle'
+import { describe, it, expect } from 'vitest'
 
 describe('generatePuzzle', () => {
   it('should generate a puzzle of the specified size', () => {

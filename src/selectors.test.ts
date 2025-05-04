@@ -1,6 +1,7 @@
 import { generatePuzzle } from 'generatePuzzle'
 import { isSolved } from './selectors'
 import { Action, reducer } from 'reducer'
+import { describe, it, expect } from 'vitest'
 
 // puzzle (* = excluded)
 //
@@ -27,7 +28,7 @@ describe('selectors', () => {
       const actions: Action[] = [
         { type: 'EXCLUDE', coordinates: { row: 0, col: 0 } },
         { type: 'EXCLUDE', coordinates: { row: 0, col: 1 } },
-        { type: 'EXCLUDE', coordinates: { row: 0, col: 2 } },
+        { type: 'EXCLUDE', coordinates: { row: 0, col: 2 } }
       ]
       const newState = actions.reduce(reducer, state)
       expect(isSolved(newState)).toBe(false)
@@ -41,7 +42,7 @@ describe('selectors', () => {
         { type: 'EXCLUDE', coordinates: { row: 0, col: 2 } },
         { type: 'EXCLUDE', coordinates: { row: 1, col: 2 } },
         { type: 'EXCLUDE', coordinates: { row: 2, col: 0 } },
-        { type: 'EXCLUDE', coordinates: { row: 2, col: 1 } },
+        { type: 'EXCLUDE', coordinates: { row: 2, col: 1 } }
       ]
       const newState = actions.reduce(reducer, state)
       expect(isSolved(newState)).toBe(true)
