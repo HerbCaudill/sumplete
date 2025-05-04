@@ -8,8 +8,13 @@ import { TotalCell } from './TotalCell'
 import { ValueCell } from './ValueCell'
 import { RadioGroup } from './RadioGroup'
 import { generatePuzzle } from 'generatePuzzle'
+import { Confetti } from './Confetti'
+import cx from 'classnames'
 
-const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({ label: `${n}⨉${n}`, value: String(n) }))
+const sizes = range(MIN_SIZE, MAX_SIZE).map((n) => ({
+  label: `${n}⨉${n}`,
+  value: String(n)
+}))
 
 export const Game = ({ initialState, onStateChange }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState, initializer)
@@ -55,64 +60,83 @@ export const Game = ({ initialState, onStateChange }: Props) => {
 
   return (
     <>
-      <div className="my-4 border p-2 rounded-lg font-semibold">⏱️ {formatSeconds(seconds)}</div>
-      {/* grid */}
-      <div className={`select-none grid grid-cols-${size + 1} w-full gap-1 `}>
-        {nums.map(i => (
-          <Fragment key={`row-${i}`}>
-            {/* row values */}
-            {state.rows[i].map((cell, j) => (
-              <ValueCell //
-                key={`${i}-${j}`}
-                cell={cell}
-                dispatch={dispatch}
-              />
-            ))}
-
-            {/* row total */}
-            <TotalCell //
-              targetValue={state.rowTargets[i]}
-              currentValue={state.rowTotals[i]}
-            />
-          </Fragment>
-        ))}
-        {/* column totals */}
-        {nums.map(j => (
-          <TotalCell
-            key={`col-total-${j}`}
-            targetValue={state.colTargets[j]}
-            currentValue={state.colTotals[j]}
-          />
-        ))}
-
-        {/* blank lower-right cell */}
-        <TotalCell />
-      </div>
-      {/* success message */}
       {state.solved ? (
-        <p className="text-lg font-serif mt-2">
-          🥳 You solved it in {formatSeconds(seconds)}. Well done!
-        </p>
+        <div className="fixed top-0 left-0 w-full h-1/2 flex flex-col items-center justify-center ">
+          <Confetti />
+          <div
+            className={cx(
+              'bg-white text-black font-semibold whitespace-nowrap text-center tracking-wide',
+              'py-1 px-4 rounded border border-black',
+              'animate-celebrate'
+            )}
+            style={{
+              transform: ' scale3d(1,1,1)'
+            }}
+          >
+            🥳 You solved it in {formatSeconds(seconds)}. Well done!
+          </div>
+        </div>
       ) : null}
 
-      <div className="flex gap-2 my-4">
-        <button className="button-xs button-white" onClick={restartGame}>
-          <IconReload className="size-4" />
-          Restart
-        </button>
-        <button className="button-xs button-white" onClick={() => startNewGame(String(size))}>
-          <IconFile className="size-4" />
-          New
-        </button>
-      </div>
-      {/* size selector */}
-      <div className="flex gap-2">
-        <RadioGroup
-          label="Size"
-          initialValue={String(size)}
-          options={sizes}
-          onChange={startNewGame}
-        />
+      <div className="m-3">
+        <div className="my-4 border p-2 rounded-lg font-semibold">
+          ⏱️ {formatSeconds(seconds)}
+        </div>
+        {/* grid */}
+        <div className={`select-none grid grid-cols-${size + 1} w-full gap-1 `}>
+          {nums.map((i) => (
+            <Fragment key={`row-${i}`}>
+              {/* row values */}
+              {state.rows[i].map((cell, j) => (
+                <ValueCell //
+                  key={`${i}-${j}`}
+                  cell={cell}
+                  dispatch={dispatch}
+                />
+              ))}
+
+              {/* row total */}
+              <TotalCell //
+                targetValue={state.rowTargets[i]}
+                currentValue={state.rowTotals[i]}
+              />
+            </Fragment>
+          ))}
+          {/* column totals */}
+          {nums.map((j) => (
+            <TotalCell
+              key={`col-total-${j}`}
+              targetValue={state.colTargets[j]}
+              currentValue={state.colTotals[j]}
+            />
+          ))}
+
+          {/* blank lower-right cell */}
+          <TotalCell />
+        </div>
+
+        <div className="flex gap-2 my-4">
+          <button className="button-xs button-white" onClick={restartGame}>
+            <IconReload className="size-4" />
+            Restart
+          </button>
+          <button
+            className="button-xs button-white"
+            onClick={() => startNewGame(String(size))}
+          >
+            <IconFile className="size-4" />
+            New
+          </button>
+        </div>
+        {/* size selector */}
+        <div className="flex gap-2">
+          <RadioGroup
+            label="Size"
+            initialValue={String(size)}
+            options={sizes}
+            onChange={startNewGame}
+          />
+        </div>
       </div>
     </>
   )
