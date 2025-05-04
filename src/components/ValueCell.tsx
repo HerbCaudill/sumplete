@@ -14,11 +14,6 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
     else dispatch({ type: 'CLEAR', coordinates })
   }
 
-  const onClick = (e: React.MouseEvent) => {
-    if (e.shiftKey) toggleInclude()
-    else toggleExclude()
-  }
-
   return (
     <div
       className={cx(
@@ -30,7 +25,13 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
           'border border-gray-200 bg-white text-gray-200': state === 'EXCLUDE',
         }
       )}
-      onClick={onClick}
+      onClick={e => {
+        if (e.shiftKey) toggleInclude()
+        else toggleExclude()
+      }}
+      onDoubleClick={e => {
+        toggleInclude()
+      }}
     >
       <span>{value}</span>
     </div>
