@@ -1,13 +1,14 @@
 import cx from 'classnames'
+import { useRef, useState } from 'react'
 import { Action } from 'reducer'
 import { Cell } from 'types'
-import { useState, useRef } from 'react'
 
-const DOUBLE_TAP_DELAY = 300 // milliseconds
+const LONG_PRESS_DURATION = 500 // milliseconds
 
 export const ValueCell = ({ cell, dispatch }: Props) => {
   const { coordinates, value, state } = cell
-  const lastTap = useRef<number>(0)
+  const longPressTimer = useRef<NodeJS.Timeout | null>(null)
+  const [isLongPressing, setIsLongPressing] = useState(false)
 
   const toggleExclude = () => {
     if (state !== 'EXCLUDE') dispatch({ type: 'EXCLUDE', coordinates })
@@ -19,21 +20,29 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
     else dispatch({ type: 'CLEAR', coordinates })
   }
 
-  const handleTap = (e: React.MouseEvent | React.TouchEvent) => {
-    const now = Date.now()
-    const timeSinceLastTap = now - lastTap.current
+  const handlePressStart = (e: React.MouseEvent | React.TouchEvent) => {
+    setIsLongPressing(false)
 
-    if (timeSinceLastTap < DOUBLE_TAP_DELAY) {
-      // Double tap detected
-      e.preventDefault()
-      e.stopPropagation()
+    // Start the long press timer
+    longPressTimer.current = setTimeout(() => {
+      setIsLongPressing(true)
       toggleInclude()
-      lastTap.current = 0 // Reset to prevent triple-tap detection
-    } else {
-      // Single tap
-      toggleExclude()
-      lastTap.current = now
+    }, LONG_PRESS_DURATION)
+  }
+
+  const handlePressEnd = (e: React.MouseEvent | React.TouchEvent) => {
+    // Clear the long press timer
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
     }
+
+    // Only trigger the normal click if it wasn't a long press
+    if (!isLongPressing) {
+      toggleExclude()
+    }
+
+    setIsLongPressing(false)
   }
 
   const handleContextMenu = (e: React.MouseEvent) => {
@@ -41,6 +50,14 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
     e.preventDefault()
     e.stopPropagation()
     return false
+  }
+
+  const handlePressCancel = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
+    }
+    setIsLongPressing(false)
   }
 
   return (
@@ -54,11 +71,15 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
           'border border-gray-200 bg-white text-gray-200': state === 'EXCLUDE'
         }
       )}
-      onClick={handleTap}
+      onMouseDown={handlePressStart}
+      onMouseUp={handlePressEnd}
+      onMouseLeave={handlePressCancel}
+      onTouchStart={handlePressStart}
       onTouchEnd={e => {
         e.preventDefault()
-        handleTap(e)
+        handlePressEnd(e)
       }}
+      onTouchCancel={handlePressCancel}
       onContextMenu={handleContextMenu}
     >
       <span style={{ fontSize: 'max(18px, min(40cqw, 30px))' }}>{value}</span>

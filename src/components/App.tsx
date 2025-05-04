@@ -30,7 +30,7 @@ export const App = () => {
   )
 
   return puzzle ? (
-    <div className="flex flex-col items-center">
+    <div className="fixed left-0 top-0 flex flex-col items-center bg-blue-50 h-screen w-full">
       <div className="container mx-auto flex flex-col max-w-xl gap-2">
         <Game initialState={puzzle} onStateChange={setPuzzle} />
       </div>

@@ -5,7 +5,7 @@ import cx from 'classnames'
 export function RadioGroup<T extends string | number | boolean>({
   initialValue,
   onChange = () => {},
-  options,
+  options
 }: Props<T>) {
   const [selectedValue, setSelectedValue] = useState(initialValue)
   return (
@@ -37,8 +37,10 @@ export function RadioGroup<T extends string | number | boolean>({
                     { 'rounded-l-md': i === 0 },
                     // selected
                     { 'bg-primary-600 text-white': checked },
+                    // unselected
+                    { 'bg-white text-gray-900': !checked },
                     // hover (unselected)
-                    { 'hover:bg-gray-50 hover:text-black ': !checked },
+                    { 'hover:bg-gray-50 hover:text-black ': !checked }
                   ])}
                 >
                   {label}
