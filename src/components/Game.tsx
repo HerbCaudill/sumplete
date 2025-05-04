@@ -56,7 +56,6 @@ export const Game = ({ initialState, onStateChange }: Props) => {
   return (
     <>
       <div className="my-4 border p-2 rounded-lg font-semibold">⏱️ {formatSeconds(seconds)}</div>
-
       {/* grid */}
       <div className={`select-none grid grid-cols-${size + 1} w-full gap-1 `}>
         {nums.map(i => (
@@ -94,13 +93,19 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         <p className="text-lg font-serif mt-2">
           🥳 You solved it in {formatSeconds(seconds)}. Well done!
         </p>
-      ) : (
-        <div>
-          <button className="button-xs button-white" onClick={restartGame}>
-            Restart
-          </button>
-        </div>
-      )}
+      ) : null}
+
+      <div className="flex gap-2 my-4">
+        <button className="button-xs button-white" onClick={restartGame}>
+          <IconReload className="size-4" />
+          Restart
+        </button>
+        <button className="button-xs button-white" onClick={() => startNewGame(String(size))}>
+          <IconFile className="size-4" />
+          New
+        </button>
+      </div>
+      {/* size selector */}
       <div className="flex gap-2">
         <RadioGroup
           label="Size"

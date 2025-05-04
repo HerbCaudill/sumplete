@@ -20,9 +20,11 @@ p {
 /* Buttons */
 
 button {
-  @apply inline-flex items-center rounded border border-transparent;
-  @apply font-medium focus:outline-none focus:ring-2;
-  @apply disabled:opacity-40;
+  @apply inline-flex items-center justify-center gap-2;
+  @apply rounded-md border border-opacity-50 bg-white border-black;
+  @apply focus:outline-none focus:ring-0;
+  @apply font-mono;
+  @apply disabled:opacity-50;
 }
 
 .button-xs {
