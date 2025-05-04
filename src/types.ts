@@ -25,3 +25,16 @@ export type PuzzleState = PuzzleGrid & {
   colTotals: number[]
   solved?: boolean
 }
+
+export type CompletionRecord = {
+  time: number // time in seconds
+  date: string // ISO date string
+}
+
+export type CompletionRecords = {
+  [size: number]: CompletionRecord[]
+}
+
+export type BestTimes = {
+  [size: number]: number | null
+}

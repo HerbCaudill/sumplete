@@ -80,7 +80,7 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
     >
       <div
         className={cx(
-          'aspect-square rounded-full size-[30cqw] flex items-center justify-center',
+          'aspect-square rounded-full size-[60%]  flex items-center justify-center',
           {
             'bg-green-500  text-white font-bold': state === 'INCLUDE',
             'text-gray-200': state === 'EXCLUDE'

@@ -9,6 +9,9 @@ import { ValueCell } from './ValueCell'
 import { RadioGroup } from './RadioGroup'
 import { generatePuzzle } from 'generatePuzzle'
 import { Confetti } from './Confetti'
+import { useCompletionRecords } from '../hooks/useCompletionRecords'
+import { RecordNotification } from './RecordNotification'
+import cx from 'classnames'
 
 const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
   label: `${n}⨉${n}`,
@@ -17,8 +20,15 @@ const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
 
 export const Game = ({ initialState, onStateChange }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState, initializer)
+  const { saveTime: addRecord, getBestTime } = useCompletionRecords()
+  const [isNewRecord, setIsNewRecord] = useState(false)
+  const [completionTime, setCompletionTime] = useState<number | null>(null)
 
-  // Use useEffect to call onStateChange after state updates
+  const size = state.rows.length
+  const nums = range(0, size - 1)
+  const bestTime = getBestTime(size)
+
+  // Update the parent component when the game state changes
   useEffect(() => {
     if (onStateChange) onStateChange(state)
   }, [state, onStateChange])
@@ -31,30 +41,45 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     }
   }, [])
 
-  const size = state.rows.length
-  const nums = range(0, size - 1)
-
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
   const [seconds, setSeconds] = useState(0)
 
+  // start timer when the game starts
   useEffect(() => {
-    const stopTimer = () => {
-      if (timer !== null) {
+    if (timer) clearInterval(timer)
+    setTimer(
+      setInterval(
+        () => setSeconds(Math.floor((Date.now() - state.startTime) / 1000)),
+        100
+      )
+    )
+  }, [state.startTime])
+
+  // stop timer when the game is solved
+  useEffect(() => {
+    if (state.solved) {
+      if (timer) {
         clearInterval(timer)
         setTimer(null)
       }
     }
+  }, [state.solved])
 
-    if (timer) stopTimer()
-    setTimer(
-      setInterval(() => {
-        if (state.solved) stopTimer()
-        else setSeconds(Math.floor((Date.now() - state.startTime) / 1000))
-      }, 100)
-    )
-
-    return stopTimer
-  }, [state.startTime, state.solved])
+  // Record completion time when the game is solved
+  useEffect(() => {
+    if (state.solved && !completionTime) {
+      const time = Math.floor((Date.now() - state.startTime) / 1000)
+      setCompletionTime(time)
+      const isRecord = addRecord(size, time)
+      if (isRecord) {
+        setIsNewRecord(true)
+      }
+    } else if (!state.solved && completionTime) {
+      // Reset when starting a new game
+      setCompletionTime(null)
+      setIsNewRecord(false)
+    }
+  }, [state.solved, completionTime, addRecord, size, state.startTime])
 
   const startNewGame = (size: string) => {
     const newState = generatePuzzle({ size: Number(size) })
@@ -67,23 +92,48 @@ export const Game = ({ initialState, onStateChange }: Props) => {
 
   return (
     <>
-      {state.solved ? (
-        <div className="fixed top-0 left-0 w-full h-1/2 flex flex-col items-center justify-center ">
-          <Confetti />
-        </div>
+      {state.solved && isNewRecord && completionTime ? (
+        <>
+          <div className="fixed top-0 left-0 w-full h-2 flex flex-col items-center justify-center ">
+            <Confetti />
+          </div>
+
+          <RecordNotification
+            time={completionTime}
+            size={size}
+            onClose={() => setIsNewRecord(false)}
+          />
+        </>
       ) : null}
 
       <div className="flex flex-col h-screen gap-4 select-none p-3">
-        <div className="flex gap-2 ">
-          <div className="border p-2 text-sm rounded-lg font-semibold grow flex items-center gap-2">
+        {/* toolbar */}
+        <div className="flex w-full gap-2">
+          {/* Timer */}
+          <div
+            className={cx(
+              'border p-2 rounded-lg grow flex items-center gap-2',
+              { 'text-white border-transparent bg-green-500': state.solved }
+            )}
+          >
             <IconStopwatch className="size-4" />
-            {formatSeconds(seconds)}
+            <span className="text-sm font-semibold grow">
+              {formatSeconds(seconds)}
+            </span>
+            {bestTime !== null && (
+              <span className="text-xs ">Best: {formatSeconds(bestTime)}</span>
+            )}
           </div>
 
-          <button className="button-xs button-white" onClick={restartGame}>
-            <IconReload className="size-4" />
-            Restart
-          </button>
+          {/* Reload */}
+          {!state.solved ? (
+            <button className="button-xs button-white" onClick={restartGame}>
+              <IconReload className="size-4" />
+              Restart
+            </button>
+          ) : null}
+
+          {/* New */}
           <button
             className="button-xs button-white"
             onClick={() => startNewGame(String(size))}
@@ -94,7 +144,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         </div>
 
         {/* grid */}
-        <div className={` grid grid-cols-${size + 1} w-full gap-1 `}>
+        <div className={`grid grid-cols-${size + 1} w-full gap-1 `}>
           {nums.map(i => (
             <Fragment key={`row-${i}`}>
               {/* row values */}
