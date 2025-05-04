@@ -44,11 +44,8 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
           cell.state = 'EMPTY'
         })
       })
-      break
-    }
-
-    case 'END': {
-      // end the game
+      // reset timer
+      partialState.startTime = Date.now()
       break
     }
   }
