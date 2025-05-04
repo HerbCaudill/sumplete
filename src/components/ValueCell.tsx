@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import { Action } from 'reducer'
 import { Cell } from 'types'
 
-const LONG_PRESS_DURATION = 500 // milliseconds
+const LONG_PRESS_DURATION = 250 // milliseconds
 
 export const ValueCell = ({ cell, dispatch }: Props) => {
   const { coordinates, value, state } = cell
@@ -63,13 +63,9 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
   return (
     <div
       className={cx(
-        'Cell ValueCell flex items-center justify-center', //
+        'Cell ValueCell flex items-center justify-center ', //
         'font-bold text-black cursor-pointer',
-        {
-          'border border-gray-200 bg-white ': state === 'EMPTY',
-          'bg-green-500  text-white font-bold': state === 'INCLUDE',
-          'border border-gray-200 bg-white text-gray-200': state === 'EXCLUDE'
-        }
+        'border border-gray-200 bg-white '
       )}
       onMouseDown={handlePressStart}
       onMouseUp={handlePressEnd}
@@ -82,7 +78,18 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
       onTouchCancel={handlePressCancel}
       onContextMenu={handleContextMenu}
     >
-      <span style={{ fontSize: 'max(18px, min(40cqw, 30px))' }}>{value}</span>
+      <div
+        className={cx(
+          'aspect-square rounded-full size-[30cqw] flex items-center justify-center',
+          {
+            'bg-green-500  text-white font-bold': state === 'INCLUDE',
+            'text-gray-200': state === 'EXCLUDE'
+          }
+        )}
+        style={{ fontSize: 'max(18px, min(40cqw, 30px))' }}
+      >
+        {value}
+      </div>
     </div>
   )
 }

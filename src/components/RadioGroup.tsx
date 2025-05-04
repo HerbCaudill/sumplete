@@ -27,7 +27,7 @@ export function RadioGroup<T extends string | number | boolean>({
               {({ checked }) => (
                 <span
                   className={cx([
-                    'cursor-pointer relative inline-flex items-center border border-gray-300 px-3 py-1 text-sm font-medium',
+                    'cursor-pointer relative inline-flex items-center border border-gray-300 px-4 py-1 text-sm ',
                     'focus:z-10 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700',
                     // first item
                     { 'rounded-r-md': i === options.length - 1 },
@@ -36,7 +36,7 @@ export function RadioGroup<T extends string | number | boolean>({
                     // last item
                     { 'rounded-l-md': i === 0 },
                     // selected
-                    { 'bg-primary-600 text-white': checked },
+                    { 'bg-primary-600 text-white font-bold': checked },
                     // unselected
                     { 'bg-white text-gray-900': !checked },
                     // hover (unselected)
