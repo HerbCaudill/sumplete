@@ -5,11 +5,11 @@ export const RecordNotification = ({ time, size, onClose }: Props) => {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    // Auto-hide notification after 5 seconds
+    // Auto-hide notification
     const timer = setTimeout(() => {
       setVisible(false)
       if (onClose) onClose()
-    }, 5000)
+    }, 6000)
 
     return () => clearTimeout(timer)
   }, [onClose])
