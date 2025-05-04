@@ -1,6 +1,6 @@
 import { useState, type Dispatch, type SetStateAction } from 'react'
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
+export function useLocalStorage<T>(key: string, initialValue: T | (() => T)) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     const storedValue = window.localStorage.getItem(key)
     if (storedValue) {
@@ -8,12 +8,12 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       return JSON.parse(storedValue)
     } else {
       // otherwise initialize with initialValue
-      setValue(initialValue)
-      return initialValue
+      window.localStorage.setItem(key, JSON.stringify(initialValue))
+      return initialValue instanceof Function ? initialValue() : initialValue
     }
   })
 
-  const setValue = (arg: T | ((s: T) => T)) => {
+  function setValue(arg: T | ((s: T) => T)) {
     // Allow value to be a function (same API as useState)
     const newValue = arg instanceof Function ? arg(storedValue) : arg
     // Update value in memory
