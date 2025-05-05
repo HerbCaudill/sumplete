@@ -66,7 +66,6 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     dispatch({ type: 'RESTART' })
   }
 
-  console.log('rendering game')
   return (
     <>
       {state.solved && isNewRecord && completionTime ? (
