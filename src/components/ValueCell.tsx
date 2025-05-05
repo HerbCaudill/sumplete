@@ -73,9 +73,9 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
   return (
     <div
       className={cx(
-        'Cell ValueCell flex items-center justify-center ', //
+        'flex items-center justify-center ',
         'font-bold text-black cursor-pointer',
-        'border border-gray-200 bg-white '
+        'border border-gray-200 bg-white rounded-md'
       )}
       onMouseDown={handlePressStart}
       onMouseUp={handlePressEnd}
