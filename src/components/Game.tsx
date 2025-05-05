@@ -1,17 +1,16 @@
-import { Fragment, useEffect, useReducer, useState, useCallback } from 'react'
+import { generatePuzzle } from 'generatePuzzle'
+import { Fragment, useEffect, useReducer, useState } from 'react'
 import { initializer, reducer } from 'reducer'
 import { PuzzleState } from 'types'
 import { range } from 'utils/range'
 import { MAX_SIZE, MIN_SIZE } from '../constants'
-import { TotalCell } from './TotalCell'
-import { ValueCell } from './ValueCell'
-import { RadioGroup } from './RadioGroup'
-import { generatePuzzle } from 'generatePuzzle'
-import { Confetti } from './Confetti'
 import { useCompletionRecords } from '../hooks/useCompletionRecords'
+import { Confetti } from './Confetti'
+import { RadioGroup } from './RadioGroup'
 import { RecordNotification } from './RecordNotification'
 import { Timer } from './Timer'
-import cx from 'classnames'
+import { TotalCell } from './TotalCell'
+import { ValueCell } from './ValueCell'
 
 const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
   label: String(n),
