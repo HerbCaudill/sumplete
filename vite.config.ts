@@ -23,8 +23,8 @@ export default defineConfig({
       manifest: {
         name: 'Sumplete',
         short_name: 'Sumplete',
-        theme_color: '#e7e5e4',
-        background_color: '#e7e5e4',
+        theme_color: '#eff6ff',
+        background_color: '#eff6ff',
         display: 'standalone',
         icons: [
           {
@@ -60,5 +60,8 @@ export default defineConfig({
       ]
     }),
     icons({ compiler: 'jsx', jsx: 'react' })
-  ]
+  ],
+  worker: {
+    format: 'es'
+  }
 })
