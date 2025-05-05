@@ -14,14 +14,13 @@ export const Timer = ({ startTime, isSolved, bestTime }: Props) => {
 
   console.log('rendering timer')
 
-  // Update timer every 100ms
   useEffect(() => {
     if (timer) clearInterval(timer)
 
     setTimer(
       setInterval(
         () => setSeconds(Math.floor((Date.now() - startTime) / 1000)),
-        50
+        100
       )
     )
 

@@ -19,9 +19,11 @@ const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
 
 export const Game = ({ initialState, onStateChange }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState, initializer)
-  const { saveTime: addRecord, getBestTime } = useCompletionRecords()
+
   const [isNewRecord, setIsNewRecord] = useState(false)
   const [completionTime, setCompletionTime] = useState<number | null>(null)
+
+  const { saveTime, getBestTime } = useCompletionRecords()
 
   const size = state.rows.length
   const nums = range(0, size - 1)
@@ -40,21 +42,19 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     }
   }, [])
 
-  // Record completion time when the game is solved
   useEffect(() => {
     if (state.solved && !completionTime) {
+      // Record completion time when the game is solved
       const time = Math.floor((Date.now() - state.startTime) / 1000)
       setCompletionTime(time)
-      const isRecord = addRecord(size, time)
-      if (isRecord) {
-        setIsNewRecord(true)
-      }
+      const isRecord = saveTime(size, time)
+      if (isRecord) setIsNewRecord(true)
     } else if (!state.solved && completionTime) {
       // Reset when starting a new game
       setCompletionTime(null)
       setIsNewRecord(false)
     }
-  }, [state.solved, completionTime, addRecord, size, state.startTime])
+  }, [state.solved, completionTime, state.startTime])
 
   const startNewGame = (size: string) => {
     const newState = generatePuzzle({ size: Number(size) })
@@ -64,6 +64,8 @@ export const Game = ({ initialState, onStateChange }: Props) => {
   const restartGame = () => {
     dispatch({ type: 'RESTART' })
   }
+
+  console.log('rendering game')
 
   return (
     <>
