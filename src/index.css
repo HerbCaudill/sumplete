@@ -5,12 +5,6 @@
   container-name: Cell;
 }
 
-.ValueCell span {
-}
-
-.TotalCell span {
-}
-
 p {
   @apply mt-3;
 }
