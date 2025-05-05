@@ -73,7 +73,7 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
   return (
     <div
       className={cx(
-        'flex items-center justify-center ',
+        'Cell flex items-center justify-center ',
         'font-bold text-black cursor-pointer',
         'border border-gray-200 bg-white rounded-md'
       )}
@@ -96,7 +96,7 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
             'text-gray-200': state === 'EXCLUDE'
           }
         )}
-        style={{ fontSize: 'max(18px, min(40cqw, 30px))' }}
+        style={{ fontSize: '40cqw' }}
       >
         {value}
       </div>
