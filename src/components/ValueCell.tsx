@@ -9,6 +9,7 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
   const { coordinates, value, state } = cell
   const longPressTimer = useRef<NodeJS.Timeout | null>(null)
   const [isLongPressing, setIsLongPressing] = useState(false)
+  const touchStartedRef = useRef(false)
 
   const toggleExclude = () => {
     if (state !== 'EXCLUDE') dispatch({ type: 'EXCLUDE', coordinates })
@@ -22,6 +23,9 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
 
   const handlePressStart = (e: React.MouseEvent | React.TouchEvent) => {
     setIsLongPressing(false)
+
+    // Track if this is a touch event for later use
+    touchStartedRef.current = 'touches' in e
 
     // Start the long press timer
     longPressTimer.current = setTimeout(() => {
@@ -40,9 +44,14 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
     // Only trigger the normal click if it wasn't a long press
     if (!isLongPressing) {
       toggleExclude()
+    } else if (touchStartedRef.current) {
+      // For touch events, ensure we don't toggle back when releasing after a long press
+      e.preventDefault()
+      e.stopPropagation()
     }
 
     setIsLongPressing(false)
+    touchStartedRef.current = false
   }
 
   const handleContextMenu = (e: React.MouseEvent) => {
@@ -58,6 +67,7 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
       longPressTimer.current = null
     }
     setIsLongPressing(false)
+    touchStartedRef.current = false
   }
 
   return (
@@ -72,7 +82,7 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
       onMouseLeave={handlePressCancel}
       onTouchStart={handlePressStart}
       onTouchEnd={e => {
-        e.preventDefault()
+        e.preventDefault() // Prevent default behavior in touch events
         handlePressEnd(e)
       }}
       onTouchCancel={handlePressCancel}
