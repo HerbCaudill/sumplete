@@ -34,6 +34,12 @@ export default defineConfig({
             purpose: 'any'
           },
           {
+            src: 'favicon.solid.png',
+            sizes: '1024x1024',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
             src: 'favicon.png',
             sizes: '1024x1024',
             type: 'image/png',
