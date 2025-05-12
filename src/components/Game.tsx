@@ -22,6 +22,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
 
   const [isNewRecord, setIsNewRecord] = useState(false)
   const [completionTime, setCompletionTime] = useState<number | null>(null)
+  const [isCheckingMistakes, setIsCheckingMistakes] = useState(false)
 
   const { saveTime, getBestTime } = useCompletionRecords()
 
@@ -56,6 +57,11 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     }
   }, [state.solved, completionTime, state.startTime])
 
+  // Turn off mistake checking when the state changes
+  useEffect(() => {
+    setIsCheckingMistakes(false)
+  }, [state])
+
   const startNewGame = (size: string) => {
     const newState = generatePuzzle({ size: Number(size) })
     dispatch({ type: 'NEW', initialState: newState })
@@ -71,6 +77,29 @@ export const Game = ({ initialState, onStateChange }: Props) => {
 
   const redoMove = () => {
     dispatch({ type: 'REDO' })
+  }
+
+  const checkMistakes = () => {
+    setIsCheckingMistakes(true)
+  }
+
+  const removeMistakes = () => {
+    // Go through all cells and correct mistakes
+    state.rows.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (
+          (cell.state === 'INCLUDE' && !cell.included) ||
+          (cell.state === 'EXCLUDE' && cell.included)
+        ) {
+          dispatch({
+            type: 'CLEAR',
+            row: rowIndex,
+            col: colIndex
+          })
+        }
+      })
+    })
+    setIsCheckingMistakes(false)
   }
 
   return (
@@ -117,7 +146,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         </div>
 
         {/* grid */}
-        <div className={`grid grid-cols-${size + 1} w-full gap-1 `}>
+        <div className={`grid grid-cols-${size + 1} w-full gap-px `}>
           {nums.map(i => (
             <Fragment key={`row-${i}`}>
               {/* row values */}
@@ -126,6 +155,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
                   key={`${i}-${j}`}
                   cell={cell}
                   dispatch={dispatch}
+                  isCheckingMistakes={isCheckingMistakes}
                 />
               ))}
 
@@ -163,11 +193,11 @@ export const Game = ({ initialState, onStateChange }: Props) => {
             </button>
           </div>
           <div className="flex items-center justify-start gap-2">
-            <button className="button-xs button-white">
+            <button className="button-xs button-white" onClick={checkMistakes}>
               <IconCircleCheck className="size-4" />
               Check
             </button>
-            <button className="button-xs button-white">
+            <button className="button-xs button-white" onClick={removeMistakes}>
               <IconCircleX className="size-4" />
               Remove mistakes
             </button>
