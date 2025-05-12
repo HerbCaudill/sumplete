@@ -11,6 +11,7 @@ import { RecordNotification } from './RecordNotification'
 import { Timer } from './Timer'
 import { TotalCell } from './TotalCell'
 import { ValueCell } from './ValueCell'
+import cx from 'classnames'
 
 const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
   label: String(n),
@@ -29,7 +30,15 @@ export const Game = ({ initialState, onStateChange }: Props) => {
   const size = state.rows.length
   const nums = range(0, size - 1)
   const bestTime = getBestTime(size)
-
+  const hasMistakes = state.rows.some(row =>
+    row.some(cell => {
+      return (
+        (cell.state === 'INCLUDE' && !cell.included) ||
+        (cell.state === 'EXCLUDE' && cell.included)
+      )
+    })
+  )
+  0
   // Update the parent component when the game state changes
   useEffect(() => {
     if (onStateChange) onStateChange(state)
@@ -62,26 +71,16 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     setIsCheckingMistakes(false)
   }, [state])
 
-  const startNewGame = (size: string) => {
-    const newState = generatePuzzle({ size: Number(size) })
-    dispatch({ type: 'NEW', initialState: newState })
-  }
+  const startNewGame = (size: string) =>
+    dispatch({
+      type: 'NEW',
+      initialState: generatePuzzle({ size: Number(size) })
+    })
 
-  const restartGame = () => {
-    dispatch({ type: 'RESTART' })
-  }
-
-  const undoMove = () => {
-    dispatch({ type: 'UNDO' })
-  }
-
-  const redoMove = () => {
-    dispatch({ type: 'REDO' })
-  }
-
-  const checkMistakes = () => {
-    setIsCheckingMistakes(true)
-  }
+  const restartGame = () => dispatch({ type: 'RESTART' })
+  const undoMove = () => dispatch({ type: 'UNDO' })
+  const redoMove = () => dispatch({ type: 'REDO' })
+  const checkMistakes = () => setIsCheckingMistakes(true)
 
   const removeMistakes = () => {
     // Go through all cells and correct mistakes
@@ -181,27 +180,34 @@ export const Game = ({ initialState, onStateChange }: Props) => {
           <TotalCell />
         </div>
 
-        <div className="grow flex flex-col gap-4">
-          <div className="flex items-center justify-start gap-2">
-            <button className="button-xs button-white" onClick={undoMove}>
-              <IconArrowBackUp className="size-4" />
-              Undo
-            </button>
-            <button className="button-xs button-white" onClick={redoMove}>
-              <IconArrowForwardUp className="size-4" />
-              Redo
-            </button>
-          </div>
-          <div className="flex items-center justify-start gap-2">
-            <button className="button-xs button-white" onClick={checkMistakes}>
-              <IconCircleCheck className="size-4" />
-              Check
-            </button>
+        <div className="flex items-start gap-2 flex-1">
+          <button className="button-xs button-white" onClick={undoMove}>
+            <IconArrowBackUp className="size-4" />
+            Undo
+          </button>
+          <button className="button-xs button-white" onClick={redoMove}>
+            <IconArrowForwardUp className="size-4" />
+            Redo
+          </button>
+
+          <div className="flex-1" />
+
+          {hasMistakes && isCheckingMistakes ? (
             <button className="button-xs button-white" onClick={removeMistakes}>
               <IconCircleX className="size-4" />
               Remove mistakes
             </button>
-          </div>
+          ) : null}
+          <button
+            className={cx('button-xs', {
+              'button-white': hasMistakes || !isCheckingMistakes,
+              'button-success': !hasMistakes && isCheckingMistakes
+            })}
+            onClick={checkMistakes}
+          >
+            <IconCircleCheck className="size-4" />
+            Check
+          </button>
         </div>
 
         {/* size selector */}
