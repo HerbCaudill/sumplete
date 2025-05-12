@@ -38,7 +38,7 @@ button {
   @apply bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 text-white border-transparent;
 }
 .button-success {
-  @apply bg-success-600 hover:bg-success-700 focus:ring-success-500 text-white border-transparent;
+  @apply bg-success-500 hover:bg-success-600 focus:ring-success-400 text-white border-transparent;
 }
 .button-secondary {
   @apply bg-secondary-600 hover:bg-secondary-700 focus:ring-secondary-500 text-white border-transparent;

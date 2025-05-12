@@ -4,7 +4,7 @@ export const TotalCell = ({ targetValue, currentValue = 0, dir }: Props) => (
   <div className="Cell TotalCell">
     <div
       className={cx('flex gap-1 w-full leading-none p-[10cqw]', {
-        'text-green-600': targetValue === currentValue,
+        'text-success-600': targetValue === currentValue,
         'flex-col items-center justify-start': dir === 'column',
         'flex-row items-center justify-start': dir === 'row'
       })}
@@ -13,7 +13,7 @@ export const TotalCell = ({ targetValue, currentValue = 0, dir }: Props) => (
       }}
     >
       <span>{targetValue}</span>
-      <span>
+      <span className="text-success-500">
         {targetValue === currentValue ? (
           <IconCircleCheckFilled className="size-[1.5em]" />
         ) : null}

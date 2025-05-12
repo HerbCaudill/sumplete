@@ -39,7 +39,7 @@ export const Timer = ({ startTime, isSolved, bestTime }: Props) => {
   return (
     <div
       className={cx('border p-2 rounded-lg grow flex items-center gap-2', {
-        'text-white border-transparent bg-green-500': isSolved
+        'text-white border-transparent bg-success-500': isSolved
       })}
     >
       <IconStopwatch className="size-4" />

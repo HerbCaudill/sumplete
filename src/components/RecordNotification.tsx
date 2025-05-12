@@ -18,7 +18,7 @@ export const RecordNotification = ({ time, size, onClose }: Props) => {
 
   return (
     <div className="fixed top-4 left-0 w-full flex justify-center z-50">
-      <div className="bg-green-100 border border-green-500 text-green-700 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+      <div className="bg-success-100 border border-success-500 text-success-700 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
         🏆
         <span className="font-bold">
           New {size}x{size} Record!
