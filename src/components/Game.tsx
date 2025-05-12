@@ -211,12 +211,14 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         </div>
 
         {/* size selector */}
-        <RadioGroup
-          label="Size"
-          initialValue={String(size)}
-          options={sizes}
-          onChange={startNewGame}
-        />
+        <div className="pb-4">
+          <RadioGroup
+            label="Size"
+            initialValue={String(size)}
+            options={sizes}
+            onChange={startNewGame}
+          />
+        </div>
       </div>
     </>
   )
