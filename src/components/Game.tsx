@@ -183,11 +183,9 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         <div className="flex items-start gap-2 flex-1">
           <button className="button-xs button-white" onClick={undoMove}>
             <IconArrowBackUp className="size-4" />
-            Undo
           </button>
           <button className="button-xs button-white" onClick={redoMove}>
             <IconArrowForwardUp className="size-4" />
-            Redo
           </button>
 
           <div className="flex-1" />
