@@ -14,7 +14,8 @@ export const generatePuzzle = ({
   const nums = range(0, size - 1)
   const rows: Cell[][] = nums.map(row =>
     nums.map(col => ({
-      coordinates: { row, col },
+      row,
+      col,
       value: rand.integer(1, 9),
       included: rand.probability(INCLUDE_RATIO),
       state: 'EMPTY'

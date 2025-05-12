@@ -1,6 +1,6 @@
 import { expandState } from 'expandState'
 import { Reducer } from 'react'
-import type { Coordinates, PuzzleState, PuzzleSnapshot } from './types'
+import type { PuzzleState, PuzzleSnapshot } from './types'
 import cloneDeep from 'lodash/cloneDeep'
 
 // Helper to create a minimal state snapshot for history tracking
@@ -62,21 +62,21 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
       switch (action.type) {
         case 'CLEAR': {
           // clear this cell
-          const { row, col } = action.coordinates
+          const { row, col } = action
           partialState.rows[row][col].state = 'EMPTY'
           break
         }
 
         case 'INCLUDE': {
           // mark this cell included
-          const { row, col } = action.coordinates
+          const { row, col } = action
           partialState.rows[row][col].state = 'INCLUDE'
           break
         }
 
         case 'EXCLUDE': {
           // mark this cell excluded
-          const { row, col } = action.coordinates
+          const { row, col } = action
           partialState.rows[row][col].state = 'EXCLUDE'
           break
         }
@@ -113,9 +113,9 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
 
 export type Action =
   | { type: 'NEW'; initialState: PuzzleState }
-  | { type: 'CLEAR'; coordinates: Coordinates }
-  | { type: 'INCLUDE'; coordinates: Coordinates }
-  | { type: 'EXCLUDE'; coordinates: Coordinates }
+  | { type: 'CLEAR'; row: number; col: number }
+  | { type: 'INCLUDE'; row: number; col: number }
+  | { type: 'EXCLUDE'; row: number; col: number }
   | { type: 'RESTART' }
   | { type: 'END' }
   | { type: 'UNDO' }

@@ -1,12 +1,8 @@
 export type CellState = 'EMPTY' | 'INCLUDE' | 'EXCLUDE'
 
-export type Coordinates = {
+export type Cell = {
   row: number
   col: number
-}
-
-export type Cell = {
-  coordinates: Coordinates
   value: number
   included: boolean // is this cell included in the puzzle solution?
   state: CellState // the UI state of this cell

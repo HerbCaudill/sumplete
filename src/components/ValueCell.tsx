@@ -3,7 +3,7 @@ import { Action } from 'reducer'
 import { Cell } from 'types'
 
 export const ValueCell = ({ cell, dispatch }: Props) => {
-  const { coordinates, value, state } = cell
+  const { row, col, value, state } = cell
 
   return (
     <div
@@ -15,11 +15,11 @@ export const ValueCell = ({ cell, dispatch }: Props) => {
       onClick={e => {
         // cycle through the states
         if (state === 'EMPTY') {
-          dispatch({ type: 'EXCLUDE', coordinates })
+          dispatch({ type: 'EXCLUDE', row, col })
         } else if (state === 'EXCLUDE') {
-          dispatch({ type: 'INCLUDE', coordinates })
+          dispatch({ type: 'INCLUDE', row, col })
         } else if (state === 'INCLUDE') {
-          dispatch({ type: 'CLEAR', coordinates })
+          dispatch({ type: 'CLEAR', row, col })
         }
       }}
     >
