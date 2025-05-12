@@ -12,8 +12,6 @@ export const Timer = ({ startTime, isSolved, bestTime }: Props) => {
   const [timer, setTimer] = useState<Interval | null>(null)
   const [seconds, setSeconds] = useState(0)
 
-  console.log('rendering timer')
-
   useEffect(() => {
     if (timer) clearInterval(timer)
 

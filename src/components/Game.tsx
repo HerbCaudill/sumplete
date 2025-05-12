@@ -1,6 +1,6 @@
 import { generatePuzzle } from 'generatePuzzle'
 import { Fragment, useEffect, useReducer, useState } from 'react'
-import { initializer, reducer } from 'reducer'
+import { reducer } from 'reducer'
 import { PuzzleState } from 'types'
 import { range } from 'utils/range'
 import { MAX_SIZE, MIN_SIZE } from '../constants'
@@ -18,7 +18,7 @@ const sizes = range(MIN_SIZE, MAX_SIZE).map(n => ({
 }))
 
 export const Game = ({ initialState, onStateChange }: Props) => {
-  const [state, dispatch] = useReducer(reducer, initialState, initializer)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const [isNewRecord, setIsNewRecord] = useState(false)
   const [completionTime, setCompletionTime] = useState<number | null>(null)
@@ -65,7 +65,13 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     dispatch({ type: 'RESTART' })
   }
 
-  console.log('rendering game')
+  const undoMove = () => {
+    dispatch({ type: 'UNDO' })
+  }
+
+  const redoMove = () => {
+    dispatch({ type: 'REDO' })
+  }
 
   return (
     <>
@@ -83,7 +89,7 @@ export const Game = ({ initialState, onStateChange }: Props) => {
         </>
       ) : null}
 
-      <div className="flex flex-col gap-4 select-none p-3">
+      <div className="flex flex-col gap-4 select-none p-3 pb-5 h-screen">
         {/* toolbar */}
         <div className="flex w-full gap-2">
           <Timer
@@ -143,6 +149,29 @@ export const Game = ({ initialState, onStateChange }: Props) => {
 
           {/* blank lower-right cell */}
           <TotalCell />
+        </div>
+
+        <div className="grow flex flex-col gap-4">
+          <div className="flex items-center justify-start gap-2">
+            <button className="button-xs button-white" onClick={undoMove}>
+              <IconArrowBackUp className="size-4" />
+              Undo
+            </button>
+            <button className="button-xs button-white" onClick={redoMove}>
+              <IconArrowForwardUp className="size-4" />
+              Redo
+            </button>
+          </div>
+          <div className="flex items-center justify-start gap-2">
+            <button className="button-xs button-white">
+              <IconCircleCheck className="size-4" />
+              Check
+            </button>
+            <button className="button-xs button-white">
+              <IconCircleX className="size-4" />
+              Remove mistakes
+            </button>
+          </div>
         </div>
 
         {/* size selector */}

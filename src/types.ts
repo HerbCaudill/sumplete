@@ -18,21 +18,25 @@ export type PuzzleGrid = {
 }
 
 export type PuzzleState = PuzzleGrid & {
-  startTime: number
-  rowTargets: number[]
-  colTargets: number[]
   rowTotals: number[]
+  rowTargets: number[]
   colTotals: number[]
-  solved?: boolean
+  colTargets: number[]
+  startTime: number
+  solved: boolean
+  past: PuzzleSnapshot[]
+  future: PuzzleSnapshot[]
 }
 
-export type CompletionRecord = {
+export type PuzzleSnapshot = Pick<PuzzleState, 'rows' | 'startTime'>
+
+export type Completion = {
   time: number // time in seconds
   date: string // ISO date string
 }
 
-export type CompletionRecords = {
-  [size: number]: CompletionRecord[]
+export type Completions = {
+  [size: number]: Completion[]
 }
 
 export type BestTimes = {

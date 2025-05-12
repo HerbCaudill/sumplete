@@ -4,25 +4,27 @@ import {
   getRowTargets,
   getRowTotals,
   isSolved,
-  rowsToCols,
+  rowsToCols
 } from 'selectors'
-import { Cell, PuzzleGrid, PuzzleState } from 'types'
+import { PuzzleGrid, PuzzleState, type PuzzleSnapshot } from 'types'
 
-export const expandState = ({
-  startTime = Date.now(),
-  rows,
-}: Partial<PuzzleState> & Pick<PuzzleState, 'rows'>): PuzzleState => {
+export const expandState = (partialState: PuzzleSnapshot): PuzzleState => {
+  const { rows = [] } = partialState
   const cols = rowsToCols(rows)
   const grid = { rows, cols } as PuzzleGrid
 
   const expandedState: PuzzleState = {
-    startTime,
+    past: [],
+    future: [],
+    ...partialState,
     ...grid,
     rowTargets: getRowTargets(grid),
     colTargets: getColTargets(grid),
     rowTotals: getRowTotals(grid),
     colTotals: getColTotals(grid),
+    solved: false
   }
   expandedState.solved = isSolved(expandedState)
+
   return expandedState
 }

@@ -5,7 +5,10 @@ import { range } from 'utils/range'
 
 const INCLUDE_RATIO = 0.5 // % of cells to include
 
-export const generatePuzzle = ({ size = 3, seed = undefined }: Props = {}): PuzzleState => {
+export const generatePuzzle = ({
+  size = 3,
+  seed = undefined
+}: Props = {}): PuzzleState => {
   const compositeSeed = seed ? `${seed}_${size}` : undefined
   const rand = makeRandom(compositeSeed)
   const nums = range(0, size - 1)
@@ -14,10 +17,11 @@ export const generatePuzzle = ({ size = 3, seed = undefined }: Props = {}): Puzz
       coordinates: { row, col },
       value: rand.integer(1, 9),
       included: rand.probability(INCLUDE_RATIO),
-      state: 'EMPTY',
+      state: 'EMPTY'
     }))
   )
-  return expandState({ rows })
+  const expanded = expandState({ rows, startTime: Date.now() })
+  return expanded
 }
 
 type Props = {

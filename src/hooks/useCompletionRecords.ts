@@ -1,16 +1,16 @@
 import { useLocalStorage } from './useLocalStorage'
-import { CompletionRecord, CompletionRecords, BestTimes } from '../types'
+import { Completion, Completions, BestTimes } from '../types'
 
 const COMPLETION_RECORDS_KEY = 'sumplete-completion-records'
 
 export const useCompletionRecords = () => {
-  const [records, setRecords] = useLocalStorage<CompletionRecords>(
+  const [records, setRecords] = useLocalStorage<Completions>(
     COMPLETION_RECORDS_KEY,
     {}
   )
 
   // Get all records for a specific puzzle size
-  const getRecords = (size: number): CompletionRecord[] => records[size] || []
+  const getRecords = (size: number): Completion[] => records[size] || []
 
   // Record completion time for a specific puzzle size
   const saveTime = (size: number, time: number) => {
