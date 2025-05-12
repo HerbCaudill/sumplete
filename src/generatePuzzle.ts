@@ -1,5 +1,6 @@
 import { makeRandom } from '@herbcaudill/random'
 import { expandState } from 'expandState'
+import { hasUniqueSolution } from 'solve'
 import { PuzzleState, Cell } from 'types'
 import { range } from 'utils/range'
 
@@ -7,9 +8,9 @@ const INCLUDE_RATIO = 0.5 // % of cells to include
 
 export const generatePuzzle = ({
   size = 3,
-  seed = undefined
+  seed = Math.random().toString(36)
 }: Props = {}): PuzzleState => {
-  const compositeSeed = seed ? `${seed}_${size}` : undefined
+  const compositeSeed = `${seed}_${size}`
   const rand = makeRandom(compositeSeed)
   const nums = range(0, size - 1)
   const rows: Cell[][] = nums.map(row =>
@@ -21,8 +22,15 @@ export const generatePuzzle = ({
       state: 'EMPTY'
     }))
   )
+
   const expanded = expandState({ rows, startTime: Date.now() })
-  return expanded
+
+  const { rowTargets, colTargets } = expanded
+  if (hasUniqueSolution({ rows, rowTargets, colTargets })) {
+    return expanded
+  } else {
+    return generatePuzzle({ size, seed: compositeSeed + '!' })
+  }
 }
 
 type Props = {

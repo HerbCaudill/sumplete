@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest'
 
 describe('generatePuzzle', () => {
   it('should generate a puzzle of the specified size', () => {
-    const size = 5
+    const size = 4
     const puzzle = generatePuzzle({ size })
     expect(puzzle.rows.length).toBe(size)
     expect(puzzle.rows[0].length).toBe(size)
@@ -15,13 +15,13 @@ describe('generatePuzzle', () => {
     const seed = 'test'
     const puzzle1 = generatePuzzle({ seed })
     const puzzle2 = generatePuzzle({ seed })
-    expect(puzzle1).toEqual(puzzle2)
+    expect(puzzle1.rows).toEqual(puzzle2.rows)
   })
 
   it('should generate a puzzle with random values', () => {
     const puzzle1 = generatePuzzle()
     const puzzle2 = generatePuzzle()
-    expect(puzzle1).not.toEqual(puzzle2)
+    expect(puzzle1.rows).not.toEqual(puzzle2.rows)
   })
 
   it('should calculate the correct row & column totals', () => {
