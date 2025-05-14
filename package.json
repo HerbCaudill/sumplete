@@ -9,6 +9,7 @@
   },
   "type": "module",
   "scripts": {
+    "benchmark": "vitest bench",
     "dev": "vite --port 3000 --host --open http://localhost:3000?seed=test",
     "build": "tsc && vite build",
     "icons": "node ./src/scripts/icons.js",
