@@ -26,10 +26,11 @@ export const generatePuzzle = ({
   const expanded = expandState({ rows, startTime: Date.now() })
 
   const { rowTargets, colTargets } = expanded
+
   if (hasUniqueSolution({ rows, rowTargets, colTargets })) {
     return expanded
   } else {
-    return generatePuzzle({ size, seed: compositeSeed + '!' })
+    return generatePuzzle({ size, seed: seed + '!' })
   }
 }
 
