@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { solve, hasUniqueSolution, type PuzzleForSolver } from './solve'
-import { Cell, PuzzleState } from './types'
+import { describe, expect, it } from 'vitest'
+import { hasUniqueSolution, solve, type PuzzleForSolver } from './solve'
 
 // Helper function to create a PuzzleState for testing
 const createTestPuzzle = ({
