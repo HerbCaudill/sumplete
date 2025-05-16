@@ -1,9 +1,12 @@
-import { cloneDeep } from 'lodash'
-import { PuzzleState } from 'types'
+import { cloneDeep } from "lodash"
+import { type PuzzleForSolver } from "types"
 
+/**
+ * Optimized solver implementation with early pruning techniques
+ */
 export const solve = (
   puzzle: PuzzleForSolver,
-  limit: number = Number.MAX_SAFE_INTEGER
+  limit: number = Number.MAX_SAFE_INTEGER,
 ): boolean[][][] => {
   const { rows, rowTargets, colTargets } = puzzle
   const size = rows.length
@@ -16,34 +19,22 @@ export const solve = (
     .fill(false)
     .map(() => Array(size).fill(false))
 
-  const visit = (row: number, col: number) => {
+  // Keep track of current sums for faster validation
+  const rowSums = Array(size).fill(0)
+  const colSums = Array(size).fill(0)
+
+  const visit = (row: number, col: number): void => {
     // Stop if we've found enough solutions
     if (solutions.length >= limit) return
 
     // If we've processed all cells, check if this is a valid solution
     if (row === size) {
-      // Calculate row sums for current configuration
-      const rowSums = includedCells.map((row, i) =>
-        row.reduce((sum, included, j) => sum + (included ? values[i][j] : 0), 0)
-      )
-
-      // Calculate column sums for current configuration
-      const colSums = Array(size)
-        .fill(0)
-        .map((_, j) =>
-          Array(size)
-            .fill(0)
-            .map((_, i) => (includedCells[i][j] ? values[i][j] : 0))
-            .reduce((a, b) => a + b, 0)
-        )
-
-      // Check if all targets are met
-      const isValid =
+      // At this point all our running sums should match targets
+      const isSolved =
         rowSums.every((sum, i) => sum === rowTargets[i]) &&
         colSums.every((sum, j) => sum === colTargets[j])
 
-      if (isValid) solutions.push(cloneDeep(includedCells))
-
+      if (isSolved) solutions.push(cloneDeep(includedCells))
       return
     }
 
@@ -51,16 +42,71 @@ export const solve = (
     const nextCol = (col + 1) % size
     const nextRow = nextCol === 0 ? row + 1 : row
 
-    // Try including this cell
-    includedCells[row][col] = true
-    visit(nextRow, nextCol)
+    // Can we include this cell?
 
-    // Try excluding this cell
+    includedCells[row][col] = true
+    rowSums[row] += values[row][col]
+    colSums[col] += values[row][col]
+
+    // Early pruning for inclusion path
+    let canContinueWithInclusion = true
+
+    if (nextCol === 0)
+      if (rowSums[row] !== rowTargets[row])
+        // If we've completed a row and it doesn't match target, prune
+        canContinueWithInclusion = false
+      else if (rowSums[row] > rowTargets[row])
+        // If current row sum already exceeds target, prune
+        canContinueWithInclusion = false
+
+    if (row === size - 1)
+      if (colSums[col] !== colTargets[col])
+        // If we're on the last row and the column doesn't match target, prune
+        canContinueWithInclusion = false
+      else if (colSums[col] > colTargets[col])
+        // If current column sum already exceeds target, prune
+        canContinueWithInclusion = false
+
+    if (canContinueWithInclusion) visit(nextRow, nextCol)
+
+    // Backtrack and try excluding this cell
+    rowSums[row] -= values[row][col]
+    colSums[col] -= values[row][col]
     includedCells[row][col] = false
-    visit(nextRow, nextCol)
+
+    // Early pruning for exclusion path
+    let canContinueWithExclusion = true
+
+    // Check if excluding this cell makes it impossible to reach row target
+    if (nextCol === 0)
+      if (rowSums[row] !== rowTargets[row]) canContinueWithExclusion = false
+      else {
+        const remainingMaxPossible = values[row].slice(col + 1).reduce((sum, val) => sum + val, 0)
+
+        if (rowSums[row] + remainingMaxPossible < rowTargets[row]) {
+          canContinueWithExclusion = false
+        }
+      }
+
+    // Check if excluding this cell makes it impossible to reach column target
+    if (row === size - 1)
+      if (colSums[col] !== colTargets[col]) canContinueWithExclusion = false
+      else {
+        // Calculate remaining max possible sum for this column after exclusion
+        let remainingMaxPossible = 0
+        for (let r = row + 1; r < size; r++) {
+          remainingMaxPossible += values[r][col]
+        }
+
+        if (colSums[col] + remainingMaxPossible < colTargets[col]) {
+          canContinueWithExclusion = false
+        }
+      }
+
+    if (canContinueWithExclusion) visit(nextRow, nextCol)
   }
 
-  // Start backtracking from first cell
+  // Start with first cell
   visit(0, 0)
 
   return solutions
@@ -76,8 +122,3 @@ export const hasUniqueSolution = (puzzle: PuzzleForSolver): boolean => {
   // Stop searching after finding 2 solutions to optimize performance
   return solve(puzzle, 2).length === 1
 }
-
-export type PuzzleForSolver = Pick<
-  PuzzleState,
-  'rows' | 'rowTargets' | 'colTargets'
->

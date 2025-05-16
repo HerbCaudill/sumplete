@@ -26,9 +26,9 @@ describe('selectors', () => {
     it('when partially solved, returns false', () => {
       const { state } = setup()
       const actions: Action[] = [
-        { type: 'EXCLUDE', row: 0, col: 0 },
-        { type: 'EXCLUDE', row: 0, col: 1 },
-        { type: 'EXCLUDE', row: 0, col: 2 }
+        { type: '-', row: 0, col: 0 },
+        { type: '-', row: 0, col: 1 },
+        { type: '-', row: 0, col: 2 }
       ]
       const newState = actions.reduce(reducer, state)
       expect(isSolved(newState)).toBe(false)
@@ -37,12 +37,12 @@ describe('selectors', () => {
     it('when solved, returns true', () => {
       const { state } = setup()
       const actions: Action[] = [
-        { type: 'EXCLUDE', row: 0, col: 0 },
-        { type: 'EXCLUDE', row: 0, col: 1 },
-        { type: 'EXCLUDE', row: 0, col: 2 },
-        { type: 'EXCLUDE', row: 1, col: 2 },
-        { type: 'EXCLUDE', row: 2, col: 0 },
-        { type: 'EXCLUDE', row: 2, col: 1 }
+        { type: '-', row: 0, col: 0 },
+        { type: '-', row: 0, col: 1 },
+        { type: '-', row: 0, col: 2 },
+        { type: '-', row: 1, col: 2 },
+        { type: '-', row: 2, col: 0 },
+        { type: '-', row: 2, col: 1 }
       ]
       const newState = actions.reduce(reducer, state)
       expect(isSolved(newState)).toBe(true)

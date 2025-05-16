@@ -1,12 +1,14 @@
-import { Cell, PuzzleGrid, PuzzleState } from 'types'
+import { PuzzleCell, PuzzleGrid, PuzzleState } from 'types'
 import { sum, zipWith } from 'lodash'
 
-export const rowsToCols = (rows: Cell[][]) => zipWith<Cell, Cell[]>(...rows)
+export const rowsToCols = (rows: PuzzleCell[][]) =>
+  zipWith<PuzzleCell, PuzzleCell[]>(...rows)
 
-const getTotal = (filterExp: (cell: Cell) => boolean) => (cells: Cell[]) =>
-  sum(cells.filter(filterExp).map(cell => cell.value))
+const getTotal =
+  (filterExp: (cell: PuzzleCell) => boolean) => (cells: PuzzleCell[]) =>
+    sum(cells.filter(filterExp).map(cell => cell.value))
 
-export const getCurrentTotal = getTotal(cell => cell.state !== 'EXCLUDE') // sum of the cells that the player hasn't excluded
+export const getCurrentTotal = getTotal(cell => cell.state !== '-') // sum of the cells that the player hasn't excluded
 export const getTargetTotal = getTotal(cell => cell.included) // sum of the cells that are included in the puzzle solution
 
 export const getRowTargets = (grid: PuzzleGrid) => grid.rows.map(getTargetTotal)

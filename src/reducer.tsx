@@ -63,21 +63,21 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
         case 'CLEAR': {
           // clear this cell
           const { row, col } = action
-          partialState.rows[row][col].state = 'EMPTY'
+          partialState.rows[row][col].state = '?'
           break
         }
 
-        case 'INCLUDE': {
+        case '+': {
           // mark this cell included
           const { row, col } = action
-          partialState.rows[row][col].state = 'INCLUDE'
+          partialState.rows[row][col].state = '+'
           break
         }
 
-        case 'EXCLUDE': {
+        case '-': {
           // mark this cell excluded
           const { row, col } = action
-          partialState.rows[row][col].state = 'EXCLUDE'
+          partialState.rows[row][col].state = '-'
           break
         }
 
@@ -85,7 +85,7 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
           // start this game over (clear all included/excluded cells)
           partialState.rows.forEach(row => {
             row.forEach(cell => {
-              cell.state = 'EMPTY'
+              cell.state = '?'
             })
           })
           // reset timer
@@ -101,7 +101,7 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
       if (newState.solved) {
         newState.rows.forEach(row => {
           row.forEach(cell => {
-            if (cell.state === 'EMPTY') cell.state = 'INCLUDE'
+            if (cell.state === '?') cell.state = '+'
           })
         })
       }
@@ -114,8 +114,8 @@ export const reducer: Reducer<PuzzleState, Action> = (state, action) => {
 export type Action =
   | { type: 'NEW'; initialState: PuzzleState }
   | { type: 'CLEAR'; row: number; col: number }
-  | { type: 'INCLUDE'; row: number; col: number }
-  | { type: 'EXCLUDE'; row: number; col: number }
+  | { type: '+'; row: number; col: number }
+  | { type: '-'; row: number; col: number }
   | { type: 'RESTART' }
   | { type: 'END' }
   | { type: 'UNDO' }

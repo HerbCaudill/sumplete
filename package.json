@@ -1,8 +1,8 @@
 {
   "name": "sumplete",
-  "description": "A recreation of the puzzle game Sumplete",
   "version": "0.0.1",
   "private": true,
+  "description": "A recreation of the puzzle game Sumplete",
   "author": {
     "name": "Herb Caudill",
     "email": "herb@devresults.com"
@@ -10,8 +10,8 @@
   "type": "module",
   "scripts": {
     "benchmark": "vitest bench",
-    "dev": "vite --port 3000 --host --open http://localhost:3000?seed=test",
     "build": "tsc && vite build",
+    "dev": "vite --port 3000 --host --open http://localhost:3000?seed=test",
     "icons": "node ./src/scripts/icons.js",
     "serve": "vite preview",
     "test": "vitest",
@@ -53,6 +53,7 @@
     "jsdom": "^26.1.0",
     "postcss": "^8.5.3",
     "prettier": "3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "3",
     "typescript": "^5.8.3",
     "vite": "^6.3.4",

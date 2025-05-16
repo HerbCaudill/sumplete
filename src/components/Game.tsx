@@ -33,8 +33,8 @@ export const Game = ({ initialState, onStateChange }: Props) => {
   const hasMistakes = state.rows.some(row =>
     row.some(cell => {
       return (
-        (cell.state === 'INCLUDE' && !cell.included) ||
-        (cell.state === 'EXCLUDE' && cell.included)
+        (cell.state === '+' && !cell.included) ||
+        (cell.state === '-' && cell.included)
       )
     })
   )
@@ -87,8 +87,8 @@ export const Game = ({ initialState, onStateChange }: Props) => {
     state.rows.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
         if (
-          (cell.state === 'INCLUDE' && !cell.included) ||
-          (cell.state === 'EXCLUDE' && cell.included)
+          (cell.state === '+' && !cell.included) ||
+          (cell.state === '-' && cell.included)
         ) {
           dispatch({
             type: 'CLEAR',

@@ -1,7 +1,7 @@
 import { makeRandom } from '@herbcaudill/random'
 import { expandState } from 'expandState'
 import { hasUniqueSolution } from 'solve'
-import { PuzzleState, Cell } from 'types'
+import { PuzzleState, PuzzleCell } from 'types'
 import { range } from 'utils/range'
 
 const INCLUDE_RATIO = 0.5 // % of cells to include
@@ -13,13 +13,13 @@ export const generatePuzzle = ({
   const compositeSeed = `${seed}_${size}`
   const rand = makeRandom(compositeSeed)
   const nums = range(0, size - 1)
-  const rows: Cell[][] = nums.map(row =>
+  const rows: PuzzleCell[][] = nums.map(row =>
     nums.map(col => ({
       row,
       col,
       value: rand.integer(1, 9),
       included: rand.probability(INCLUDE_RATIO),
-      state: 'EMPTY'
+      state: '?'
     }))
   )
 

@@ -1,6 +1,6 @@
 import cx from 'classnames'
 import { Action } from 'reducer'
-import { Cell } from 'types'
+import { PuzzleCell } from 'types'
 
 export const ValueCell = ({
   cell,
@@ -12,8 +12,8 @@ export const ValueCell = ({
   // Determine if this cell has a mistake (only when actively checking)
   const hasMistake =
     isCheckingMistakes &&
-    ((state === 'INCLUDE' && !included) || // Included but shouldn't be
-      (state === 'EXCLUDE' && included)) // Excluded but should be included
+    ((state === '+' && !included) || // Included but shouldn't be
+      (state === '-' && included)) // Excluded but should be included
 
   return (
     <div
@@ -25,11 +25,11 @@ export const ValueCell = ({
       )}
       onClick={e => {
         // cycle through the states
-        if (state === 'EMPTY') {
-          dispatch({ type: 'EXCLUDE', row, col })
-        } else if (state === 'EXCLUDE') {
-          dispatch({ type: 'INCLUDE', row, col })
-        } else if (state === 'INCLUDE') {
+        if (state === '?') {
+          dispatch({ type: '-', row, col })
+        } else if (state === '-') {
+          dispatch({ type: '+', row, col })
+        } else if (state === '+') {
           dispatch({ type: 'CLEAR', row, col })
         }
       }}
@@ -38,8 +38,8 @@ export const ValueCell = ({
         className={cx(
           'aspect-square rounded-full size-[60%] flex items-center justify-center',
           {
-            'bg-green-500 text-white font-bold': state === 'INCLUDE',
-            'text-gray-200': state === 'EXCLUDE'
+            'bg-green-500 text-white font-bold': state === '+',
+            'text-gray-200': state === '-'
           }
         )}
         style={{ fontSize: '40cqw' }}
@@ -51,7 +51,7 @@ export const ValueCell = ({
 }
 
 type Props = {
-  cell: Cell
+  cell: PuzzleCell
   dispatch: React.Dispatch<Action>
   isCheckingMistakes?: boolean
 }
